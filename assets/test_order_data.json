@@ -1,0 +1,58 @@
+{
+   "orderInfo":{
+      "orderMid":"22KK272631471",
+      "orderStatusTxt":"",
+      "orderLangCode":"zh-tw",
+      "crtDt":"2022-02-23 06:31",
+      "userCrtDt":"2022-02-23 14:31 (Taipei)",
+      "currCd":"TWD",
+      "currPrice":420,
+      "currPriceTotal":420,
+      "supplierName":"夜宿海生館 海景世界企業(股)公司",
+      "supplierOid":93,
+      "memberUuid":"0e5deb84-8742-49bc-a59e-d3e54e365e76",
+      "msgOid":""
+   },
+   "orderContact":{
+      "contactFirstname":"廷宇",
+      "contactLastname":"陳",
+      "contactEmail":"tinyu.chen@kkday.com",
+      "telCountryCd":"886",
+      "contactTel":"0917528250",
+      "contactCountryCd":"TW"
+   },
+   "productInfo":{
+      "productOid":9468,
+      "orderLangCode":"zh-tw",
+      "productNameMaster":"\b【94折優惠】台灣屏東｜國立海洋生物博物館門票",
+      "packageNameMaster":"海生館門票",
+      "skuInfosMaster":[
+         {
+            "spec":[
+               {
+                  "title":"單規",
+                  "value":"不拘"
+               }
+            ]
+         }
+      ],
+      "productNameUserLang":"\b【94折優惠】台灣屏東｜國立海洋生物博物館門票",
+      "packageNameUserLang":"海生館門票",
+      "skuInfosUserLang":[
+         {
+            "spec":[
+               {
+                  "title":"單規",
+                  "value":"不拘"
+               }
+            ]
+         }
+      ],
+      "begLstGoDt":"2022-02-23",
+      "endLstBackDt":"2022-02-23",
+      "goDateDescriptionType":"01",
+      "eventTime":"",
+      "guideLang":"ct",
+      "voiceGuideLang":""
+   }
+}

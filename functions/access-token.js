@@ -4,41 +4,65 @@ const VoiceGrant = AccessToken.VoiceGrant;
 
 exports.handler = function(context, event, callback) {
 
-    const client = context.getTwilioClient()
-    const accountSid = client.accountSid
-    const apiKey = context.API_KEY;
-    const apiSecret = context.API_KEY_SECRET;
-    
-    const outgoingApplicationSid = context.APP_SID;
+    (async () => {
+        const client = context.getTwilioClient()
+        const accountSid = client.accountSid
+        const apiKey = context.API_KEY;
+        const apiSecret = context.API_KEY_SECRET;
+        const outgoingApplicationSid = context.APP_SID;
 
-    console.log(event)
-    console.log(event.identity)
-    console.log(context.DEFAULT_IDENTITY)
- 
-    const identity = context.DEFAULT_IDENTITY;
-
-    const token = new AccessToken(accountSid, apiKey, apiSecret);
-  
-    const voiceGrant = new VoiceGrant({
-        outgoingApplicationSid: outgoingApplicationSid,
-        incomingAllow: true
-    });
+        let zendesk_user_email = event.zendesk_user_email ? event.zendesk_user_email : "zendesk@kkday.com"
+        console.log(zendesk_user_email);
    
-    token.addGrant(voiceGrant);
-    token.identity = identity
+        let worker = await getWorker(zendesk_user_email)
+        console.log("Woker: ", worker)
 
-    data = {
-        token: token.toJwt(),
-        identity: event.identity
-    };
+        let attributes_obj = JSON.parse(worker.attributes)
+        let identity = attributes_obj.identity ? attributes_obj.identity : context.DEFAULT_IDENTITY
+        console.log("Identity: ", identity)
 
-    let response = new Twilio.Response();
-    response.appendHeader('Access-Control-Allow-Origin', '*');
-    response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
-    response.appendHeader('Content-Type', 'application/json');
-    response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+        const token = new AccessToken(accountSid, apiKey, apiSecret);
+        const voiceGrant = new VoiceGrant({
+            outgoingApplicationSid: outgoingApplicationSid,
+            incomingAllow: true
+        });
+    
+        token.addGrant(voiceGrant);
+        token.identity = identity
 
-    response.setBody(data)
+        data = {
+            token: token.toJwt(),
+            identity: identity
+        };
 
-    return callback(null, response);
+        let response = new Twilio.Response();
+        response.appendHeader('Access-Control-Allow-Origin', '*');
+        response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
+        response.appendHeader('Content-Type', 'application/json');
+        response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+        response.setBody(data)
+
+        return callback(null, response);
+
+        function getWorker(email) {
+
+            return client.taskrouter.v1.workspaces(context.WORKER_SPACE_SID)
+                    .workers
+                    .list()
+                    .then(workers => {
+    
+                        let select_worker = null
+
+                        workers.forEach(worker => {
+                            let attributes_obj = JSON.parse(worker.attributes)
+                            if (attributes_obj.user_email == email) {
+                                select_worker = worker
+                            }
+                        });
+
+                        return select_worker
+                    });
+        }
+    })()
 };
